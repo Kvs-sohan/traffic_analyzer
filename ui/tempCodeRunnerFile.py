@@ -1,0 +1,1 @@
+        self.settings_panel = SimplifiedTrafficSettings(settings_frame, self.traffic_manager)

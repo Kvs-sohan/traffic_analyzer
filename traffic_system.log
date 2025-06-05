@@ -1,0 +1,938 @@
+2025-06-05 14:00:24,719 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:00:24,720 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:00:24,722 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:00:24,722 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:00:24,723 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:00:24,723 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:00:24,723 - root - INFO - Camera Manager initialized
+2025-06-05 14:00:24,724 - root - INFO - Area Manager initialized
+2025-06-05 14:00:25,174 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:00:25,174 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:00:25,175 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:00:25,175 - root - INFO - Signal Controller initialized
+2025-06-05 14:00:25,175 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:00:25,176 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:00:25,176 - root - INFO - Traffic Database initialized
+2025-06-05 14:00:25,176 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:00:25,176 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:00:25,189 - root - INFO - Initialized capture for source: data/videos/signal_0.mp4
+2025-06-05 14:00:25,204 - root - INFO - Initialized capture for source: data/videos/signal_1.mp4
+2025-06-05 14:00:25,216 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:00:25,244 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:00:25,244 - root - INFO - Initialized 4 captures
+2025-06-05 14:00:25,244 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:00:25,245 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:00:25,245 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:00:25,386 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:00:25,772 - root - ERROR - Failed to start application:
+1
+
+Traceback:
+Traceback (most recent call last):
+  File "D:\Traffic_analyser\Traffic_managementsystem\main.py", line 53, in main
+    app = TrafficUI(root, traffic_manager)
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\layout.py", line 485, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\layout.py", line 509, in setup_ui
+    self.settings_panel = SimplifiedTrafficSettings(settings_frame, self.traffic_manager)
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\settings.py", line 21, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\settings.py", line 33, in setup_ui
+    self.setup_camera_tab()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\settings.py", line 73, in setup_camera_tab
+    self.create_camera_config(cameras_frame, i)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\settings.py", line 133, in create_camera_config
+    self.update_source_type()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Traffic_analyser\Traffic_managementsystem\ui\settings.py", line 140, in update_source_type
+    entries = self.camera_entries[i]
+              ~~~~~~~~~~~~~~~~~~~^^^
+KeyError: 1
+
+2025-06-05 14:01:55,637 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:01:55,637 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:01:55,640 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:01:55,640 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:01:55,640 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:01:55,641 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:01:55,641 - root - INFO - Camera Manager initialized
+2025-06-05 14:01:55,642 - root - INFO - Area Manager initialized
+2025-06-05 14:01:56,166 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:01:56,166 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:01:56,166 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:01:56,166 - root - INFO - Signal Controller initialized
+2025-06-05 14:01:56,167 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:01:56,167 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:01:56,167 - root - INFO - Traffic Database initialized
+2025-06-05 14:01:56,167 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:01:56,168 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:01:56,181 - root - INFO - Initialized capture for source: data/videos/signal_0.mp4
+2025-06-05 14:01:56,192 - root - INFO - Initialized capture for source: data/videos/signal_1.mp4
+2025-06-05 14:01:56,202 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:01:56,216 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:01:56,216 - root - INFO - Initialized 4 captures
+2025-06-05 14:01:56,217 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:01:56,217 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:01:56,217 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:01:56,327 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:01:56,716 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:02:24,109 - root - INFO - Saved camera sources configuration
+2025-06-05 14:02:24,183 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:02:24,209 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:02:24,219 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:02:24,230 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:02:24,231 - root - INFO - Initialized 4 captures
+2025-06-05 14:04:15,259 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:04:15,259 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:04:15,260 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:04:15,260 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:04:15,261 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:04:15,261 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:04:15,261 - root - INFO - Camera Manager initialized
+2025-06-05 14:04:15,262 - root - INFO - Area Manager initialized
+2025-06-05 14:04:15,635 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:04:15,635 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:04:15,636 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:04:15,636 - root - INFO - Signal Controller initialized
+2025-06-05 14:04:15,637 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:04:15,637 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:04:15,637 - root - INFO - Traffic Database initialized
+2025-06-05 14:04:15,638 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:04:15,638 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:04:15,664 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:04:15,676 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:04:15,686 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:04:15,697 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:04:15,698 - root - INFO - Initialized 4 captures
+2025-06-05 14:04:15,698 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:04:15,698 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:04:15,698 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:04:15,801 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:04:16,158 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:04:24,737 - root - INFO - Saved camera sources configuration
+2025-06-05 14:04:24,795 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:04:24,805 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:04:24,816 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:04:24,825 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:04:24,827 - root - INFO - Initialized 4 captures
+2025-06-05 14:05:26,748 - root - INFO - Saved camera sources configuration
+2025-06-05 14:05:26,784 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:05:26,795 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:05:26,807 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:05:26,817 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:05:26,817 - root - INFO - Initialized 4 captures
+2025-06-05 14:09:35,240 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:09:35,240 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:09:35,241 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:09:35,241 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:09:35,242 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:09:35,242 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:09:35,242 - root - INFO - Camera Manager initialized
+2025-06-05 14:09:35,243 - root - INFO - Area Manager initialized
+2025-06-05 14:09:35,755 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:09:35,755 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:09:35,755 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:09:35,756 - root - INFO - Signal Controller initialized
+2025-06-05 14:09:35,756 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:09:35,757 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:09:35,757 - root - INFO - Traffic Database initialized
+2025-06-05 14:09:35,757 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:09:35,758 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:09:35,758 - root - INFO - Released all video captures
+2025-06-05 14:09:35,785 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:09:35,802 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:09:35,813 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:09:35,825 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:09:35,825 - root - INFO - Initialized 4 captures
+2025-06-05 14:09:35,825 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:09:35,825 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:09:35,826 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:09:35,945 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:09:36,546 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:09:44,445 - root - INFO - Saved camera sources configuration
+2025-06-05 14:09:44,476 - root - INFO - Released all video captures
+2025-06-05 14:09:44,508 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:09:44,525 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:09:44,537 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:09:44,547 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:09:44,547 - root - INFO - Initialized 4 captures
+2025-06-05 14:11:30,097 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:11:30,098 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:11:30,099 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:11:30,099 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:11:30,099 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:11:30,100 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:11:30,100 - root - INFO - Camera Manager initialized
+2025-06-05 14:11:30,101 - root - INFO - Area Manager initialized
+2025-06-05 14:11:30,747 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:11:30,748 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:11:30,748 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:11:30,748 - root - INFO - Signal Controller initialized
+2025-06-05 14:11:30,749 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:11:30,749 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:11:30,749 - root - INFO - Traffic Database initialized
+2025-06-05 14:11:30,750 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:11:30,750 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:11:30,751 - root - INFO - Released all video captures
+2025-06-05 14:11:30,784 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:11:30,800 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:11:30,816 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:11:30,828 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:11:30,829 - root - INFO - Initialized 4 captures
+2025-06-05 14:11:30,829 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:11:30,830 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:11:30,830 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:11:30,960 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:11:31,445 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:11:36,014 - root - INFO - Starting traffic management system...
+2025-06-05 14:11:36,015 - root - INFO - Starting processing for signal 0
+2025-06-05 14:11:36,015 - root - INFO - Starting processing for signal 1
+2025-06-05 14:11:36,016 - root - INFO - Starting processing for signal 2
+2025-06-05 14:11:36,017 - root - INFO - Starting processing for signal 3
+2025-06-05 14:11:36,019 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:11:36,019 - root - INFO - Traffic management system started successfully
+2025-06-05 14:11:36,076 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:36,099 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:36,101 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:36,107 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:37,079 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:37,115 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:37,117 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:37,122 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:38,084 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:38,131 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:38,134 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:38,140 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:39,089 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:39,144 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:39,147 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:39,148 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:40,091 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:40,151 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:40,161 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:40,161 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:41,028 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:11:41,092 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:41,160 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:41,171 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:41,173 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:42,095 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:42,165 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:42,179 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:42,180 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:43,098 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:43,176 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:43,192 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:43,193 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:44,108 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:44,180 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:44,202 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:44,203 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:45,111 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:45,189 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:45,212 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:45,212 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:46,029 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:11:46,113 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:46,196 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:46,225 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:46,225 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:47,115 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:47,202 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:47,232 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:47,232 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:48,118 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:48,210 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:48,245 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:48,246 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:49,123 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:49,215 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:49,256 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:49,257 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:50,125 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:50,226 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:50,262 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:50,263 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:51,031 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:11:51,127 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:51,231 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:51,275 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:51,276 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:52,128 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:52,238 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:52,283 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:52,283 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:53,130 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:53,244 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:53,296 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:53,296 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:54,131 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:54,249 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:54,309 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:54,310 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:55,133 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:55,260 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:55,316 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:55,317 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:56,032 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:11:56,135 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:56,265 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:56,329 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:56,330 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:57,137 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:57,276 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:57,341 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:57,343 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:58,143 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:58,281 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:58,351 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:58,352 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:59,145 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:59,292 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:59,362 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:11:59,362 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:00,147 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:00,300 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:00,373 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:00,373 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:01,033 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:12:01,149 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:01,310 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:01,381 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:01,381 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:02,208 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:02,315 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:02,395 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:02,396 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:03,213 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:03,325 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:03,409 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:03,410 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:04,215 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:04,329 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:04,416 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:04,416 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:05,217 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:05,335 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:05,430 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:05,430 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:06,035 - root - ERROR - Error updating signal timing: 'dict' object has no attribute 'vehicle_history'
+2025-06-05 14:12:06,219 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:06,343 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:06,442 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:06,443 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:07,222 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:07,350 - root - ERROR - Error processing signal 0: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:07,449 - root - ERROR - Error processing signal 2: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:07,450 - root - ERROR - Error processing signal 1: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:08,225 - root - ERROR - Error processing signal 3: 'VehicleDetector' object has no attribute 'detect_vehicles'
+2025-06-05 14:12:08,265 - root - INFO - Stopping traffic management system...
+2025-06-05 14:12:10,233 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:16:02,951 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:16:02,951 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:16:02,952 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:16:02,952 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:16:02,952 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:16:02,953 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:16:02,953 - root - INFO - Camera Manager initialized
+2025-06-05 14:16:02,953 - root - INFO - Area Manager initialized
+2025-06-05 14:16:03,415 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:16:03,416 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:16:03,416 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:16:03,416 - root - INFO - Signal Controller initialized
+2025-06-05 14:16:03,417 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:16:03,417 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:16:03,417 - root - INFO - Traffic Database initialized
+2025-06-05 14:16:03,417 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:16:03,418 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:16:03,418 - root - INFO - Released all video captures
+2025-06-05 14:16:03,447 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:16:03,458 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:16:03,472 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:16:03,483 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:16:03,483 - root - INFO - Initialized 4 captures
+2025-06-05 14:16:03,484 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:16:03,484 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:16:03,484 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:16:03,604 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:16:04,057 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:16:18,599 - root - INFO - Starting traffic management system...
+2025-06-05 14:16:18,603 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:18,603 - root - INFO - Traffic management system started successfully
+2025-06-05 14:16:19,604 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:20,609 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:21,612 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:22,618 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:23,620 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:24,623 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:25,623 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:26,625 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:27,195 - root - INFO - Stopping traffic management system...
+2025-06-05 14:16:27,626 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:16:27,629 - root - INFO - Saved camera sources configuration
+2025-06-05 14:16:27,654 - root - INFO - Released all video captures
+2025-06-05 14:16:27,679 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:16:27,691 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:16:27,703 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:16:27,714 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:16:27,715 - root - INFO - Initialized 4 captures
+2025-06-05 14:16:27,715 - root - INFO - Starting traffic management system...
+2025-06-05 14:16:27,719 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:27,719 - root - INFO - Traffic management system started successfully
+2025-06-05 14:16:28,726 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:29,728 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:30,734 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:31,736 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:32,737 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:33,738 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:34,756 - root - INFO - Signal timing updated successfully
+2025-06-05 14:16:34,938 - root - INFO - Stopping traffic management system...
+2025-06-05 14:16:35,758 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:17:18,903 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:17:18,903 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:17:18,904 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:17:18,905 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:17:18,905 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:17:18,905 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:17:18,906 - root - INFO - Camera Manager initialized
+2025-06-05 14:17:18,906 - root - INFO - Area Manager initialized
+2025-06-05 14:17:19,382 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:17:19,382 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:17:19,382 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:17:19,383 - root - INFO - Signal Controller initialized
+2025-06-05 14:17:19,383 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:17:19,383 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:17:19,384 - root - INFO - Traffic Database initialized
+2025-06-05 14:17:19,384 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:17:19,384 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:17:19,385 - root - INFO - Released all video captures
+2025-06-05 14:17:19,414 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:17:19,426 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:17:19,438 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:17:19,449 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:17:19,450 - root - INFO - Initialized 4 captures
+2025-06-05 14:17:19,450 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:17:19,450 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:17:19,451 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:17:19,573 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:17:20,207 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:17:22,766 - root - INFO - Starting traffic management system...
+2025-06-05 14:17:22,770 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:22,771 - root - INFO - Traffic management system started successfully
+2025-06-05 14:17:23,772 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:24,773 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:25,775 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:26,777 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:27,779 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:28,780 - root - INFO - Signal timing updated successfully
+2025-06-05 14:17:29,236 - root - INFO - Stopping traffic management system...
+2025-06-05 14:17:29,783 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:18:15,639 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:18:15,639 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:18:15,640 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:18:15,640 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:18:15,641 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:18:15,641 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:18:15,641 - root - INFO - Camera Manager initialized
+2025-06-05 14:18:15,642 - root - INFO - Area Manager initialized
+2025-06-05 14:18:16,083 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:18:16,084 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:18:16,084 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:18:16,084 - root - INFO - Signal Controller initialized
+2025-06-05 14:18:16,085 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:18:16,085 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:18:16,085 - root - INFO - Traffic Database initialized
+2025-06-05 14:18:16,086 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:18:16,086 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:18:16,087 - root - INFO - Released all video captures
+2025-06-05 14:18:16,114 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:18:16,126 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:18:16,138 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:18:16,149 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:18:16,150 - root - INFO - Initialized 4 captures
+2025-06-05 14:18:16,150 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:18:16,150 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:18:16,150 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:18:16,257 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:18:16,900 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:18:19,688 - root - INFO - Starting traffic management system...
+2025-06-05 14:18:19,691 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:19,691 - root - INFO - Traffic management system started successfully
+2025-06-05 14:18:20,692 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:21,913 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:22,950 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:23,954 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:24,955 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:25,957 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:26,986 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:27,987 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:28,995 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:29,999 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:31,032 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:32,063 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:33,074 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:34,096 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:35,125 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:36,142 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:37,164 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:38,172 - root - INFO - Signal timing updated successfully
+2025-06-05 14:18:38,496 - root - INFO - Stopping traffic management system...
+2025-06-05 14:18:39,178 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:19:19,473 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:19:19,473 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:19:19,474 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:19:19,474 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:19:19,474 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:19:19,474 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:19:19,474 - root - INFO - Camera Manager initialized
+2025-06-05 14:19:19,475 - root - INFO - Area Manager initialized
+2025-06-05 14:19:19,952 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:19:19,952 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:19:19,953 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:19:19,953 - root - INFO - Signal Controller initialized
+2025-06-05 14:19:19,954 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:19:19,954 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:19:19,955 - root - INFO - Traffic Database initialized
+2025-06-05 14:19:19,955 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:19:19,955 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:19:19,956 - root - INFO - Released all video captures
+2025-06-05 14:19:19,986 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:19:19,997 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:19:20,010 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:19:20,020 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:19:20,021 - root - INFO - Initialized 4 captures
+2025-06-05 14:19:20,022 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:19:20,024 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:19:20,024 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:19:20,137 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:19:20,625 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:19:32,436 - root - INFO - Starting traffic management system...
+2025-06-05 14:19:32,439 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:32,439 - root - INFO - Traffic management system started successfully
+2025-06-05 14:19:33,445 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:34,551 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:35,552 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:36,563 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:37,563 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:38,565 - root - INFO - Signal timing updated successfully
+2025-06-05 14:19:38,679 - root - INFO - Stopping traffic management system...
+2025-06-05 14:19:39,566 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:24:16,584 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:24:16,584 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:24:16,585 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:24:16,585 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:24:16,585 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:24:16,585 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:24:16,585 - root - INFO - Camera Manager initialized
+2025-06-05 14:24:16,586 - root - INFO - Area Manager initialized
+2025-06-05 14:24:16,982 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:24:16,983 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:24:16,983 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:24:16,983 - root - INFO - Signal Controller initialized
+2025-06-05 14:24:16,984 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:24:16,984 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:24:16,985 - root - INFO - Traffic Database initialized
+2025-06-05 14:24:16,985 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:24:16,986 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:24:16,986 - root - INFO - Released all video captures
+2025-06-05 14:24:17,010 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:24:17,022 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:24:17,034 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:24:17,044 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:24:17,045 - root - INFO - Initialized 4 captures
+2025-06-05 14:24:17,045 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:24:17,045 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:24:17,046 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:24:17,162 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:24:17,592 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:30:01,234 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:30:01,234 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:30:01,235 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:30:01,235 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:30:01,236 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:30:01,236 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:30:01,236 - root - INFO - Camera Manager initialized
+2025-06-05 14:30:01,237 - root - INFO - Area Manager initialized
+2025-06-05 14:30:01,655 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:30:01,656 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:30:01,656 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:30:01,656 - root - INFO - Signal Controller initialized
+2025-06-05 14:30:01,657 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:30:01,658 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:30:01,658 - root - INFO - Traffic Database initialized
+2025-06-05 14:30:01,658 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:30:01,659 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:30:01,659 - root - INFO - Released all video captures
+2025-06-05 14:30:01,683 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:30:01,693 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:30:01,705 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:30:01,716 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:30:01,717 - root - INFO - Initialized 4 captures
+2025-06-05 14:30:01,719 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:30:01,719 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:30:01,719 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:30:01,859 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:30:02,335 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:32:03,251 - root - INFO - Starting traffic management system...
+2025-06-05 14:32:03,258 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:03,258 - root - INFO - Traffic management system started successfully
+2025-06-05 14:32:04,259 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:05,301 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:06,308 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:07,310 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:08,311 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:09,315 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:10,350 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:11,355 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:12,371 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:13,537 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:14,568 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:15,569 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:16,570 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:17,573 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:18,584 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:19,590 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:20,591 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:21,599 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:22,601 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:23,603 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:24,606 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:25,610 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:26,611 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:27,619 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:28,621 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:29,622 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:30,623 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:31,625 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:32,640 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:33,642 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:34,648 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:35,658 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:36,683 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:37,691 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:38,692 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:39,715 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:40,765 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:41,778 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:42,785 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:43,787 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:44,826 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:45,843 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:46,847 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:47,852 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:48,874 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:49,881 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:50,885 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:51,893 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:52,900 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:53,950 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:54,953 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:55,955 - root - INFO - Signal timing updated successfully
+2025-06-05 14:32:56,519 - root - INFO - Stopping traffic management system...
+2025-06-05 14:32:56,956 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:35:57,507 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:35:57,508 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:35:57,509 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:35:57,509 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:35:57,509 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:35:57,509 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:35:57,509 - root - INFO - Camera Manager initialized
+2025-06-05 14:35:57,510 - root - INFO - Area Manager initialized
+2025-06-05 14:35:57,906 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:35:57,907 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:35:57,907 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:35:57,907 - root - INFO - Signal Controller initialized
+2025-06-05 14:35:57,908 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:35:57,909 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:35:57,909 - root - INFO - Traffic Database initialized
+2025-06-05 14:35:57,909 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:35:57,910 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:35:57,910 - root - INFO - Released all video captures
+2025-06-05 14:35:57,935 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:35:57,947 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:35:57,959 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:35:57,968 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:35:57,968 - root - INFO - Initialized 4 captures
+2025-06-05 14:35:57,969 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:35:57,969 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:35:57,969 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:35:58,085 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:35:58,526 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:41:55,575 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:41:55,575 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:41:55,576 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:41:55,576 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:41:55,577 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:41:55,577 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:41:55,577 - root - INFO - Camera Manager initialized
+2025-06-05 14:41:55,577 - root - INFO - Area Manager initialized
+2025-06-05 14:41:56,052 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:41:56,052 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:41:56,053 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:41:56,053 - root - INFO - Signal Controller initialized
+2025-06-05 14:41:56,054 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:41:56,054 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:41:56,055 - root - INFO - Traffic Database initialized
+2025-06-05 14:41:56,055 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:41:56,055 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:41:56,056 - root - INFO - Released all video captures
+2025-06-05 14:41:56,079 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:41:56,090 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:41:56,103 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:41:56,114 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:41:56,114 - root - INFO - Initialized 4 captures
+2025-06-05 14:41:56,115 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:41:56,115 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:41:56,115 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:41:56,223 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:41:56,664 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:44:45,730 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:44:45,730 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:44:45,731 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:44:45,731 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:44:45,731 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:44:45,732 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:44:45,732 - root - INFO - Camera Manager initialized
+2025-06-05 14:44:45,732 - root - INFO - Area Manager initialized
+2025-06-05 14:44:46,105 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:44:46,105 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:44:46,105 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:44:46,106 - root - INFO - Signal Controller initialized
+2025-06-05 14:44:46,106 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:44:46,107 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:44:46,107 - root - INFO - Traffic Database initialized
+2025-06-05 14:44:46,107 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:44:46,107 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:44:46,108 - root - INFO - Released all video captures
+2025-06-05 14:44:46,132 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:44:46,144 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:44:46,152 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:44:46,162 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:44:46,162 - root - INFO - Initialized 4 captures
+2025-06-05 14:44:46,163 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:44:46,163 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:44:46,163 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:44:46,252 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:44:46,518 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:47:15,463 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:47:15,464 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:47:15,464 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:47:15,465 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:47:15,465 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:47:15,465 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:47:15,465 - root - INFO - Camera Manager initialized
+2025-06-05 14:47:15,465 - root - INFO - Area Manager initialized
+2025-06-05 14:47:15,837 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:47:15,838 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:47:15,838 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:47:15,838 - root - INFO - Signal Controller initialized
+2025-06-05 14:47:15,839 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:47:15,840 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:47:15,840 - root - INFO - Traffic Database initialized
+2025-06-05 14:47:15,840 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:47:15,841 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:47:15,841 - root - INFO - Released all video captures
+2025-06-05 14:47:15,865 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:47:15,877 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:47:15,888 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:47:15,899 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:47:15,900 - root - INFO - Initialized 4 captures
+2025-06-05 14:47:15,900 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:47:15,901 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:47:15,902 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:47:15,996 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:47:16,392 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:50:13,221 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:50:13,222 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:50:13,223 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:50:13,223 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:50:13,223 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:50:13,223 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:50:13,223 - root - INFO - Camera Manager initialized
+2025-06-05 14:50:13,224 - root - INFO - Area Manager initialized
+2025-06-05 14:50:13,597 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:50:13,597 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:50:13,598 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:50:13,598 - root - INFO - Signal Controller initialized
+2025-06-05 14:50:13,599 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:50:13,599 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:50:13,599 - root - INFO - Traffic Database initialized
+2025-06-05 14:50:13,600 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:50:13,600 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:50:13,600 - root - INFO - Released all video captures
+2025-06-05 14:50:13,624 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:50:13,634 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:50:13,645 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:50:13,656 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:50:13,657 - root - INFO - Initialized 4 captures
+2025-06-05 14:50:13,658 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:50:13,658 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:50:13,658 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:50:13,764 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:50:14,158 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:51:22,759 - root - INFO - Starting traffic management system...
+2025-06-05 14:51:22,764 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:22,764 - root - INFO - Traffic management system started successfully
+2025-06-05 14:51:23,767 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:24,782 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:25,799 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:26,800 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:27,803 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:28,804 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:29,833 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:30,834 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:31,835 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:32,851 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:33,900 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:34,913 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:35,921 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:36,931 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:37,936 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:38,941 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:39,969 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:40,976 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:41,999 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:43,002 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:44,007 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:45,021 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:46,028 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:47,031 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:48,044 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:49,079 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:50,104 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:51,105 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:52,110 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:53,124 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:54,140 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:55,147 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:56,148 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:57,180 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:58,189 - root - INFO - Signal timing updated successfully
+2025-06-05 14:51:59,193 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:00,195 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:01,203 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:02,206 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:03,221 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:04,227 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:05,232 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:06,242 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:07,246 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:08,248 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:09,255 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:10,273 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:11,278 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:12,314 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:13,321 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:14,329 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:15,336 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:16,337 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:17,344 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:18,360 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:19,361 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:20,371 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:21,383 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:22,387 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:23,389 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:24,392 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:25,393 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:26,394 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:27,399 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:28,430 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:29,435 - root - INFO - Signal timing updated successfully
+2025-06-05 14:52:29,586 - root - INFO - Stopping traffic management system...
+2025-06-05 14:52:30,437 - root - INFO - Traffic management system stopped successfully
+2025-06-05 14:57:58,411 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 14:57:58,411 - utils.helpers - INFO - Initializing database...
+2025-06-05 14:57:58,412 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:57:58,412 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:57:58,412 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 14:57:58,413 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 14:57:58,413 - root - INFO - Camera Manager initialized
+2025-06-05 14:57:58,413 - root - INFO - Area Manager initialized
+2025-06-05 14:57:58,781 - root - INFO - Vehicle Detector initialized
+2025-06-05 14:57:58,781 - root - INFO - Initializing Signal Controller...
+2025-06-05 14:57:58,781 - root - INFO - Signal Controller initialized successfully
+2025-06-05 14:57:58,782 - root - INFO - Signal Controller initialized
+2025-06-05 14:57:58,782 - root - INFO - Database tables and indexes created successfully
+2025-06-05 14:57:58,783 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 14:57:58,783 - root - INFO - Traffic Database initialized
+2025-06-05 14:57:58,783 - root - INFO - Traffic Analyzer initialized
+2025-06-05 14:57:58,783 - root - INFO - Loaded 4 camera sources
+2025-06-05 14:57:58,784 - root - INFO - Released all video captures
+2025-06-05 14:57:58,809 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 14:57:58,820 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 14:57:58,830 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 14:57:58,839 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 14:57:58,839 - root - INFO - Initialized 4 captures
+2025-06-05 14:57:58,839 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 14:57:58,840 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 14:57:58,840 - utils.helpers - INFO - Creating main window...
+2025-06-05 14:57:58,940 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 14:57:59,256 - utils.helpers - INFO - Starting main application loop...
+2025-06-05 14:59:31,858 - root - INFO - Starting traffic management system...
+2025-06-05 14:59:31,863 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:31,863 - root - INFO - Traffic management system started successfully
+2025-06-05 14:59:32,864 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:33,871 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:34,874 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:35,874 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:36,877 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:38,625 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:39,641 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:40,648 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:41,649 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:42,659 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:43,668 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:44,671 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:45,676 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:46,678 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:47,681 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:48,682 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:49,684 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:50,694 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:51,696 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:52,697 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:53,708 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:54,709 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:55,711 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:56,713 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:57,720 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:58,720 - root - INFO - Signal timing updated successfully
+2025-06-05 14:59:59,722 - root - INFO - Signal timing updated successfully
+2025-06-05 15:00:00,724 - root - INFO - Signal timing updated successfully
+2025-06-05 15:00:01,730 - root - INFO - Signal timing updated successfully
+2025-06-05 15:00:02,515 - root - INFO - Stopping traffic management system...
+2025-06-05 15:00:02,820 - root - INFO - Traffic management system stopped successfully
+2025-06-05 15:32:53,672 - utils.helpers - INFO - Starting Traffic Management System...
+2025-06-05 15:32:53,672 - utils.helpers - INFO - Initializing database...
+2025-06-05 15:32:53,674 - root - INFO - Database tables and indexes created successfully
+2025-06-05 15:32:53,675 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 15:32:53,675 - utils.helpers - INFO - Initializing traffic manager...
+2025-06-05 15:32:53,675 - root - INFO - Initializing Smart Traffic Manager...
+2025-06-05 15:32:53,675 - root - INFO - Camera Manager initialized
+2025-06-05 15:32:53,676 - root - INFO - Area Manager initialized
+2025-06-05 15:32:54,096 - root - INFO - Vehicle Detector initialized
+2025-06-05 15:32:54,097 - root - INFO - Initializing Signal Controller...
+2025-06-05 15:32:54,097 - root - INFO - Signal Controller initialized successfully
+2025-06-05 15:32:54,097 - root - INFO - Signal Controller initialized
+2025-06-05 15:32:54,098 - root - INFO - Database tables and indexes created successfully
+2025-06-05 15:32:54,098 - root - INFO - Database initialized successfully at data/traffic_data.db
+2025-06-05 15:32:54,099 - root - INFO - Traffic Database initialized
+2025-06-05 15:32:54,099 - root - INFO - Traffic Analyzer initialized
+2025-06-05 15:32:54,100 - root - INFO - Loaded 4 camera sources
+2025-06-05 15:32:54,100 - root - INFO - Released all video captures
+2025-06-05 15:32:54,122 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/FREE STOCK FOOTAGE - Heavy traffic.mp4
+2025-06-05 15:32:54,133 - root - INFO - Initialized capture for source: C:/Users/Dell/Downloads/Cars Moving On Road Stock Footage - Free Download.mp4
+2025-06-05 15:32:54,153 - root - INFO - Initialized capture for source: data/videos/signal_2.mp4
+2025-06-05 15:32:54,170 - root - INFO - Initialized capture for source: data/videos/signal_3.mp4
+2025-06-05 15:32:54,170 - root - INFO - Initialized 4 captures
+2025-06-05 15:32:54,171 - root - INFO - Traffic Management System components initialized successfully
+2025-06-05 15:32:54,171 - root - INFO - Smart Traffic Manager initialization completed successfully
+2025-06-05 15:32:54,171 - utils.helpers - INFO - Creating main window...
+2025-06-05 15:32:54,233 - utils.helpers - INFO - Initializing UI components...
+2025-06-05 15:32:54,467 - utils.helpers - INFO - Starting main application loop...
