@@ -14,6 +14,8 @@ import threading
 import time
 import seaborn as sns
 from matplotlib.animation import FuncAnimation
+import logging
+from typing import List, Dict, Any
 
 # UI Configuration
 UI_CONFIG = {
@@ -21,7 +23,9 @@ UI_CONFIG = {
     'window_size': (1400, 900),
     'min_window_size': (1200, 700),
     'theme': 'modern',
-    'update_interval': 100,  # milliseconds
+    'update_interval': 500,  # Increased from 100ms to 500ms
+    'graph_update_interval': 2000,  # Update graphs every 2 seconds
+    'stats_update_interval': 1000,  # Update stats every second
     'video_size': (320, 240),
     'colors': {
         'primary': '#2E86AB',
@@ -58,9 +62,12 @@ class LiveStatsPanel(ttk.Frame):
         self.traffic_manager = traffic_manager
         self.stats_labels = {}
         self.running = False
+        self.last_update = 0
+        self.update_interval = UI_CONFIG['stats_update_interval'] / 1000.0  # Convert to seconds
+        self.cached_data = {}
+        self.cache_timeout = 5.0  # Cache timeout in seconds
         
         self.setup_ui()
-        self.start_updates()
     
     def setup_ui(self):
         """Setup statistics UI"""
@@ -75,59 +82,123 @@ class LiveStatsPanel(ttk.Frame):
         
         # Create stats labels
         self.create_stat_label(stats_frame, 'total_vehicles', "Total Vehicles: 0")
-        self.create_stat_label(stats_frame, 'avg_efficiency', "Avg Efficiency: 0%")
-        self.create_stat_label(stats_frame, 'peak_signal', "Peak Signal: None")
+        self.create_stat_label(stats_frame, 'avg_efficiency', "Average Efficiency: 0%")
+        self.create_stat_label(stats_frame, 'peak_time', "Peak Traffic Time: N/A")
+        self.create_stat_label(stats_frame, 'peak_count', "Peak Vehicle Count: 0")
+        
+        # Signal-specific stats
+        for i in range(4):
+            signal_frame = ttk.LabelFrame(stats_frame, text=f"Signal {chr(65+i)}")
+            signal_frame.pack(fill=tk.X, pady=5)
+            
+            self.create_stat_label(signal_frame, f'signal_{i}_vehicles', "Vehicles: 0")
+            self.create_stat_label(signal_frame, f'signal_{i}_weight', "Traffic Weight: 0.0")
+            self.create_stat_label(signal_frame, f'signal_{i}_state', "State: RED")
+            self.create_stat_label(signal_frame, f'signal_{i}_efficiency', "Efficiency: 0%")
     
     def create_stat_label(self, parent, key, initial_text):
         """Create a statistics label"""
-        label = ttk.Label(parent, text=initial_text, font=('Arial', 10))
-        label.pack(pady=2)
+        label = ttk.Label(parent, text=initial_text)
+        label.pack(anchor=tk.W, padx=5, pady=2)
         self.stats_labels[key] = label
     
     def start_updates(self):
-        """Start the statistics update"""
+        """Start updating statistics"""
         self.running = True
         self.update_stats()
     
     def stop_updates(self):
-        """Stop the statistics update"""
+        """Stop updating statistics"""
         self.running = False
     
     def update_stats(self):
-        """Update all statistics displays"""
+        """Update statistics display"""
         if not self.running:
             return
             
-        try:
-            # Get current traffic data
-            current_data = self.traffic_manager.get_live_statistics()
+        current_time = time.time()
+        if current_time - self.last_update < self.update_interval:
+            return
             
-            if 'signals' in current_data:
-                # Calculate overall statistics
-                vehicle_counts = [signal['metrics'].get('vehicle_count', 0) 
-                                for signal in current_data['signals']]
-                efficiencies = [signal['metrics'].get('efficiency_score', 0.0) 
-                              for signal in current_data['signals']]
+        try:
+            # Check cache first
+            if (current_time - self.cached_data.get('timestamp', 0)) < self.cache_timeout:
+                analytics = self.cached_data.get('data')
+            else:
+                # Get fresh analytics data
+                analytics = self.traffic_manager.get_analytics_data()
+                self.cached_data = {
+                    'timestamp': current_time,
+                    'data': analytics
+                }
+            
+            if not analytics:
+                return
                 
-                total_vehicles = sum(vehicle_counts)
-                avg_efficiency = sum(efficiencies) / len(efficiencies) if efficiencies else 0
-                peak_signal_idx = vehicle_counts.index(max(vehicle_counts)) if vehicle_counts else 0
-                
-                # Update labels using after() for thread safety
-                self.after_idle(self.update_label, 'total_vehicles', f"Total Vehicles: {total_vehicles}")
-                self.after_idle(self.update_label, 'avg_efficiency', f"Avg Efficiency: {avg_efficiency:.1f}%")
-                self.after_idle(self.update_label, 'peak_signal', f"Peak Signal: Signal {chr(65 + peak_signal_idx)}")
+            # Update global stats
+            self.stats_labels['total_vehicles'].config(
+                text=f"Total Vehicles: {analytics.get('total_vehicles', 0)}")
+            
+            # Update efficiency
+            efficiency = analytics.get('avg_efficiency', 0)
+            self.stats_labels['avg_efficiency'].config(
+                text=f"Average Efficiency: {efficiency:.1f}%")
+            
+            # Update peak time if available
+            peak_time = analytics.get('peak_time')
+            if peak_time:
+                peak_time_str = peak_time.strftime("%H:%M:%S")
+            else:
+                peak_time_str = "N/A"
+            self.stats_labels['peak_time'].config(
+                text=f"Peak Traffic Time: {peak_time_str}")
+            
+            # Update signal-specific stats
+            for signal_data in analytics.get('signals', []):
+                signal_id = signal_data.get('signal_id')
+                if signal_id is not None:
+                    self._update_signal_stats(signal_id, signal_data)
+            
+            self.last_update = current_time
+            
+            # Schedule next update
+            if self.running:
+                self.after(int(self.update_interval * 1000), self.update_stats)
                 
         except Exception as e:
-            print(f"Error updating live stats: {e}")
-        
-        # Schedule next update
-        self.after(1000, self.update_stats)
+            logging.error(f"Error updating statistics: {str(e)}")
+            if self.running:
+                self.after(5000, self.update_stats)
     
-    def update_label(self, key, text):
-        """Thread-safe label update"""
-        if key in self.stats_labels:
-            self.stats_labels[key].config(text=text)
+    def _update_signal_stats(self, signal_id, signal_data):
+        """Update statistics for a specific signal"""
+        try:
+            # Update vehicle count
+            self.stats_labels[f'signal_{signal_id}_vehicles'].config(
+                text=f"Vehicles: {signal_data.get('total_vehicles', 0)}")
+            
+            # Update traffic weight
+            self.stats_labels[f'signal_{signal_id}_weight'].config(
+                text=f"Traffic Weight: {signal_data.get('avg_weight', 0.0):.1f}")
+            
+            # Update efficiency
+            self.stats_labels[f'signal_{signal_id}_efficiency'].config(
+                text=f"Efficiency: {signal_data.get('efficiency', 0):.1f}%")
+            
+            # Get current signal state
+            signal_state = self.traffic_manager.get_signal(signal_id)
+            if signal_state:
+                state = signal_state.get('state', 'RED')
+                remaining = signal_state.get('remaining_time', 0)
+                self.stats_labels[f'signal_{signal_id}_state'].config(
+                    text=f"State: {state} ({remaining}s)")
+        except Exception as e:
+            logging.error(f"Error updating signal {signal_id} stats: {str(e)}")
+    
+    def __del__(self):
+        """Cleanup resources"""
+        self.running = False
+        self.cached_data = None
 
 
 class GraphsPanel(ttk.Frame):
@@ -140,315 +211,358 @@ class GraphsPanel(ttk.Frame):
         self.canvases = {}
         self.data_history = {'timestamps': [], 'vehicle_counts': [[] for _ in range(4)], 
                            'efficiencies': [[] for _ in range(4)]}
-        self.max_history = 50  # Keep last 50 data points
+        self.max_history = 30  # Reduced from 50 to 30 data points
+        self.running = False
+        self.last_update = 0
+        self.update_interval = UI_CONFIG['graph_update_interval'] / 1000.0  # Convert to seconds
+        self.cached_data = {}
+        self.cache_timeout = 5.0
         
         self.setup_ui()
         self.start_graph_updates()
     
     def setup_ui(self):
-        """Setup graphs UI"""
-        # Title
-        title_label = ttk.Label(self, text="Real-Time Analytics", 
-                              font=('Arial', 12, 'bold'))
-        title_label.pack(pady=5)
-        
-        # Notebook for different graph types
-        self.notebook = ttk.Notebook(self)
-        self.notebook.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        # Vehicle Count Graph
-        self.setup_vehicle_count_graph()
-        
-        # Efficiency Graph
-        self.setup_efficiency_graph()
-        
-        # Traffic Flow Heatmap
-        self.setup_heatmap()
-        
-        # Comparative Analysis
-        self.setup_comparative_analysis()
+        """Setup graphs panel UI"""
+        # Create graphs
+        self.create_vehicle_count_graph()
+        self.create_efficiency_graph()
+        self.create_traffic_weight_graph()
+        self.create_timing_graph()
     
-    def setup_vehicle_count_graph(self):
-        """Setup vehicle count over time graph"""
-        frame = ttk.Frame(self.notebook)
-        self.notebook.add(frame, text="Vehicle Count")
-        
-        fig = Figure(figsize=(10, 6), dpi=100)
+    def create_vehicle_count_graph(self):
+        """Create vehicle count graph"""
+        fig = Figure(figsize=(6, 4), dpi=100)
         ax = fig.add_subplot(111)
-        ax.set_title('Real-Time Vehicle Count')
+        ax.set_title('Vehicle Count Over Time')
         ax.set_xlabel('Time')
-        ax.set_ylabel('Vehicle Count')
-        ax.grid(True, alpha=0.3)
+        ax.set_ylabel('Vehicles')
+        ax.grid(True)
+        
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
         self.figures['vehicle_count'] = fig
-        
-        canvas = FigureCanvasTkAgg(fig, frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         self.canvases['vehicle_count'] = canvas
     
-    def setup_efficiency_graph(self):
-        """Setup efficiency over time graph"""
-        frame = ttk.Frame(self.notebook)
-        self.notebook.add(frame, text="Efficiency")
-        
-        fig = Figure(figsize=(10, 6), dpi=100)
+    def create_efficiency_graph(self):
+        """Create efficiency graph"""
+        fig = Figure(figsize=(6, 4), dpi=100)
         ax = fig.add_subplot(111)
         ax.set_title('Signal Efficiency Over Time')
         ax.set_xlabel('Time')
         ax.set_ylabel('Efficiency (%)')
-        ax.grid(True, alpha=0.3)
-        ax.set_ylim(0, 100)
+        ax.grid(True)
+        
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
         self.figures['efficiency'] = fig
-        
-        canvas = FigureCanvasTkAgg(fig, frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         self.canvases['efficiency'] = canvas
     
-    def setup_heatmap(self):
-        """Setup traffic flow heatmap"""
-        frame = ttk.Frame(self.notebook)
-        self.notebook.add(frame, text="Traffic Heatmap")
+    def create_traffic_weight_graph(self):
+        """Create traffic weight graph"""
+        fig = Figure(figsize=(6, 4), dpi=100)
+        ax = fig.add_subplot(111)
+        ax.set_title('Traffic Weight Over Time')
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Traffic Weight')
+        ax.grid(True)
         
-        fig = Figure(figsize=(10, 6), dpi=100)
-        self.figures['heatmap'] = fig
-        
-        canvas = FigureCanvasTkAgg(fig, frame)
+        canvas = FigureCanvasTkAgg(fig, master=self)
         canvas.draw()
-        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-        self.canvases['heatmap'] = canvas
+        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        self.figures['traffic_weight'] = fig
+        self.canvases['traffic_weight'] = canvas
     
-    def setup_comparative_analysis(self):
-        """Setup comparative analysis charts"""
-        frame = ttk.Frame(self.notebook)
-        self.notebook.add(frame, text="Comparative Analysis")
+    def create_timing_graph(self):
+        """Create signal timing graph"""
+        fig = Figure(figsize=(6, 4), dpi=100)
+        ax = fig.add_subplot(111)
+        ax.set_title('Signal Timing Distribution')
+        ax.set_xlabel('Signal')
+        ax.set_ylabel('Time (seconds)')
+        ax.grid(True)
         
-        fig = Figure(figsize=(12, 8), dpi=100)
-        self.figures['comparative'] = fig
-        
-        canvas = FigureCanvasTkAgg(fig, frame)
+        canvas = FigureCanvasTkAgg(fig, master=self)
         canvas.draw()
-        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-        self.canvases['comparative'] = canvas
+        canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        self.figures['timing'] = fig
+        self.canvases['timing'] = canvas
     
     def start_graph_updates(self):
         """Start updating graphs"""
         self.running = True
         self.update_graphs()
     
-    def stop_updates(self):
-        """Stop graph updates"""
+    def stop_graph_updates(self):
+        """Stop updating graphs"""
         self.running = False
     
     def update_graphs(self):
-        """Update all graphs with latest data"""
+        """Update all graphs with current data"""
         if not self.running:
             return
             
+        current_time = time.time()
+        if current_time - self.last_update < self.update_interval:
+            if self.running:
+                self.after(int((self.update_interval - (current_time - self.last_update)) * 1000), self.update_graphs)
+            return
+            
         try:
-            # Get current data
-            current_data = self.traffic_manager.get_live_statistics()
-            current_time = datetime.now()
+            # Check cache first
+            if (current_time - self.cached_data.get('timestamp', 0)) < self.cache_timeout:
+                analytics = self.cached_data.get('data')
+            else:
+                # Get fresh analytics data
+                analytics = self.traffic_manager.get_analytics_data()
+                self.cached_data = {
+                    'timestamp': current_time,
+                    'data': analytics
+                }
             
-            if 'signals' in current_data:
-                # Update data history
-                self.data_history['timestamps'].append(current_time)
-                
-                for i in range(4):
-                    signal = current_data['signals'][i]
-                    count = signal['metrics'].get('vehicle_count', 0)
-                    efficiency = signal['metrics'].get('efficiency_score', 0.0)
-                    
-                    self.data_history['vehicle_counts'][i].append(count)
-                    self.data_history['efficiencies'][i].append(efficiency)
-                
-                # Maintain max history
-                if len(self.data_history['timestamps']) > self.max_history:
-                    self.data_history['timestamps'] = self.data_history['timestamps'][-self.max_history:]
-                    for i in range(4):
-                        self.data_history['vehicle_counts'][i] = self.data_history['vehicle_counts'][i][-self.max_history:]
-                        self.data_history['efficiencies'][i] = self.data_history['efficiencies'][i][-self.max_history:]
-                
-                # Schedule graph updates using after_idle
-                self.after_idle(self.update_vehicle_count_graph)
-                self.after_idle(self.update_efficiency_graph)
-                self.after_idle(self.update_heatmap)
-                self.after_idle(self.update_comparative_analysis)
+            if not analytics:
+                if self.running:
+                    self.after(int(self.update_interval * 1000), self.update_graphs)
+                return
             
+            # Update data history
+            self.data_history['timestamps'].append(datetime.now())
+            if len(self.data_history['timestamps']) > self.max_history:
+                self.data_history['timestamps'].pop(0)
+            
+            # Get data for all signals
+            for i in range(4):
+                # Get signal data from cache if available
+                signal_data = analytics.get('signals', [])[i] if i < len(analytics.get('signals', [])) else None
+                if not signal_data:
+                    continue
+                
+                # Update vehicle counts
+                vehicle_count = signal_data.get('total_vehicles', 0)
+                self.data_history['vehicle_counts'][i].append(vehicle_count)
+                if len(self.data_history['vehicle_counts'][i]) > self.max_history:
+                    self.data_history['vehicle_counts'][i].pop(0)
+                
+                # Update efficiencies
+                efficiency = signal_data.get('efficiency', 0)
+                self.data_history['efficiencies'][i].append(efficiency)
+                if len(self.data_history['efficiencies'][i]) > self.max_history:
+                    self.data_history['efficiencies'][i].pop(0)
+            
+            # Only update visible graphs based on current tab
+            current_tab = self.winfo_viewable()
+            if current_tab:
+                self.update_visible_graphs()
+            
+            self.last_update = current_time
+            
+            # Schedule next update
+            if self.running:
+                self.after(int(self.update_interval * 1000), self.update_graphs)
+                
         except Exception as e:
-            print(f"Error updating graphs: {e}")
-        
-        # Schedule next update
-        self.after(2000, self.update_graphs)  # Update every 2 seconds
+            logging.error(f"Error updating graphs: {str(e)}")
+            if self.running:
+                self.after(5000, self.update_graphs)
+    
+    def update_visible_graphs(self):
+        """Update only the graphs that are currently visible"""
+        try:
+            # Update vehicle count graph if visible
+            if self.canvases['vehicle_count'].winfo_viewable():
+                self.update_vehicle_count_graph()
+            
+            # Update efficiency graph if visible
+            if self.canvases['efficiency'].winfo_viewable():
+                self.update_efficiency_graph()
+            
+            # Update traffic weight graph if visible
+            if self.canvases['traffic_weight'].winfo_viewable():
+                self.update_traffic_weight_graph()
+            
+            # Update timing graph if visible
+            if self.canvases['timing'].winfo_viewable():
+                self.update_timing_graph()
+                
+        except Exception as e:
+            logging.error(f"Error updating visible graphs: {str(e)}")
     
     def update_vehicle_count_graph(self):
         """Update vehicle count graph"""
         try:
             fig = self.figures['vehicle_count']
-            fig.clear()
-            ax = fig.add_subplot(111)
+            ax = fig.axes[0]
+            ax.clear()
             
-            times = self.data_history['timestamps']
+            # Plot only visible data points to reduce rendering load
+            visible_points = min(self.max_history, len(self.data_history['timestamps']))
+            if visible_points == 0:
+                return
+                
+            timestamps = self.data_history['timestamps'][-visible_points:]
+            
+            # Plot data for each signal with simplified line style
             for i in range(4):
-                counts = self.data_history['vehicle_counts'][i]
-                ax.plot(times, counts, label=f'Signal {chr(65 + i)}')
+                counts = self.data_history['vehicle_counts'][i][-visible_points:]
+                ax.plot(timestamps, counts, label=f'Signal {chr(65+i)}', 
+                       linewidth=1, marker=None)  # Removed markers for better performance
             
-            ax.set_title('Real-Time Vehicle Count')
+            ax.set_title('Vehicle Count Over Time')
             ax.set_xlabel('Time')
-            ax.set_ylabel('Vehicle Count')
-            ax.grid(True, alpha=0.3)
-            ax.legend()
+            ax.set_ylabel('Vehicles')
+            ax.grid(False)  # Disabled grid for better performance
+            ax.legend(loc='upper right', frameon=False)  # Simplified legend
             
-            # Format x-axis to show only time
-            ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M:%S'))
-            plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-            
+            # Format x-axis with fewer ticks
+            ax.xaxis.set_major_locator(plt.MaxNLocator(5))  # Limit to 5 ticks
+            plt.setp(ax.get_xticklabels(), rotation=45)
             fig.tight_layout()
-            self.canvases['vehicle_count'].draw()
+            
+            # Use faster canvas draw
+            self.canvases['vehicle_count'].draw_idle()
             
         except Exception as e:
-            print(f"Error updating vehicle count graph: {e}")
+            logging.error(f"Error updating vehicle count graph: {str(e)}")
     
     def update_efficiency_graph(self):
         """Update efficiency graph"""
         try:
             fig = self.figures['efficiency']
-            fig.clear()
-            ax = fig.add_subplot(111)
+            ax = fig.axes[0]
+            ax.clear()
             
-            times = self.data_history['timestamps']
+            # Plot only visible data points
+            visible_points = min(self.max_history, len(self.data_history['timestamps']))
+            if visible_points == 0:
+                return
+                
+            timestamps = self.data_history['timestamps'][-visible_points:]
+            
+            # Plot data for each signal with simplified style
             for i in range(4):
-                efficiencies = self.data_history['efficiencies'][i]
-                ax.plot(times, efficiencies, label=f'Signal {chr(65 + i)}')
+                efficiencies = self.data_history['efficiencies'][i][-visible_points:]
+                ax.plot(timestamps, efficiencies, label=f'Signal {chr(65+i)}',
+                       linewidth=1, marker=None)
             
             ax.set_title('Signal Efficiency Over Time')
             ax.set_xlabel('Time')
             ax.set_ylabel('Efficiency (%)')
-            ax.grid(True, alpha=0.3)
-            ax.set_ylim(0, 100)
-            ax.legend()
+            ax.grid(False)
+            ax.legend(loc='upper right', frameon=False)
             
-            # Format x-axis to show only time
-            ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M:%S'))
-            plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-            
+            # Format x-axis with fewer ticks
+            ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+            plt.setp(ax.get_xticklabels(), rotation=45)
             fig.tight_layout()
-            self.canvases['efficiency'].draw()
+            
+            # Use faster canvas draw
+            self.canvases['efficiency'].draw_idle()
             
         except Exception as e:
-            print(f"Error updating efficiency graph: {e}")
+            logging.error(f"Error updating efficiency graph: {str(e)}")
     
-    def update_heatmap(self):
-        """Update traffic flow heatmap"""
+    def update_traffic_weight_graph(self):
+        """Update traffic weight graph"""
         try:
-            fig = self.figures['heatmap']
-            fig.clear()
-            
-            # Get historical data for heatmap (last hour = 3600 seconds)
-            df = self.traffic_manager.get_analytics_data(3600)
-            
-            if isinstance(df, pd.DataFrame) and not df.empty:
-                # Create hourly heatmap data
-                df['hour'] = pd.to_datetime(df['timestamp']).dt.hour
-                heatmap_data = df.groupby(['signal_id', 'hour'])['vehicle_count'].mean().unstack(fill_value=0)
-                
-                ax = fig.add_subplot(111)
-                sns.heatmap(heatmap_data, annot=True, fmt='.1f', cmap='YlOrRd', 
-                           ax=ax, cbar_kws={'label': 'Avg Vehicle Count'})
-                ax.set_title('Traffic Flow Heatmap (Last Hour)', fontsize=14, fontweight='bold')
-                ax.set_xlabel('Hour of Day')
-                ax.set_ylabel('Signal ID')
-                
-                # Set y-axis labels to signal names
-                ax.set_yticklabels([f'Signal {chr(65 + int(i))}' for i in heatmap_data.index])
-            else:
-                ax = fig.add_subplot(111)
-                ax.text(0.5, 0.5, 'No data available for heatmap', 
-                       horizontalalignment='center', verticalalignment='center',
-                       transform=ax.transAxes, fontsize=12)
-                ax.set_title('Traffic Flow Heatmap')
-            
-            fig.tight_layout()
-            self.canvases['heatmap'].draw()
-            
-        except Exception as e:
-            print(f"Error updating heatmap: {e}")
-    
-    def update_comparative_analysis(self):
-        """Update comparative analysis charts"""
-        try:
-            fig = self.figures['comparative']
-            fig.clear()
-            
-            current_data = self.traffic_manager.get_live_statistics()
-            
-            if 'signals' in current_data:
-                # Create 2x2 subplot grid
-                ax1 = fig.add_subplot(221)  # Current vehicle distribution
-                ax2 = fig.add_subplot(222)  # Efficiency comparison
-                ax3 = fig.add_subplot(223)  # Traffic weight distribution
-                ax4 = fig.add_subplot(224)  # Green time utilization
-                
-                # Get data from signals
-                vehicle_counts = []
-                efficiencies = []
+            if not hasattr(self, 'cached_weights') or time.time() - self.last_weight_update > 2.0:
+                # Get current traffic weights
                 weights = []
-                green_times = []
-                
-                for signal in current_data['signals']:
-                    # Get metrics
-                    metrics = signal['metrics']
-                    vehicle_counts.append(metrics.get('vehicle_count', 0))
-                    efficiencies.append(metrics.get('efficiency_score', 0.0))
-                    weights.append(metrics.get('traffic_weight', 0.0))
-                    
-                    # Get state info
-                    state_info = signal['state']
-                    if isinstance(state_info, dict):
-                        green_time = state_info.get('remaining_time', 0) if state_info.get('state') == 'GREEN' else 0
-                    else:
-                        green_time = 0
-                    green_times.append(green_time)
-                
-                signal_names = [f'Signal {chr(65 + i)}' for i in range(4)]
-                
-                # Vehicle distribution pie chart
-                if sum(vehicle_counts) > 0:
-                    ax1.pie(vehicle_counts, labels=signal_names, autopct='%1.1f%%')
-                    ax1.set_title('Current Vehicle Distribution')
-                else:
-                    ax1.text(0.5, 0.5, 'No vehicles detected', ha='center', va='center')
-                    ax1.set_title('Current Vehicle Distribution')
-                
-                # Efficiency bar chart
-                bars = ax2.bar(signal_names, efficiencies)
-                ax2.set_title('Signal Efficiency')
-                ax2.set_ylabel('Efficiency (%)')
-                ax2.set_ylim(0, 100)
-                
-                # Add value labels on bars
-                for bar, eff in zip(bars, efficiencies):
-                    height = bar.get_height()
-                    ax2.text(bar.get_x() + bar.get_width()/2., height + 1,
-                            f'{eff:.1f}%', ha='center', va='bottom')
-                
-                # Traffic weight comparison
-                ax3.bar(signal_names, weights)
-                ax3.set_title('Traffic Weight')
-                ax3.set_ylabel('Weight')
-                
-                # Green time utilization
-                ax4.bar(signal_names, green_times)
-                ax4.set_title('Green Time')
-                ax4.set_ylabel('Seconds')
-                
-                fig.tight_layout()
-                self.canvases['comparative'].draw()
+                for i in range(4):
+                    traffic_data = self.traffic_manager.get_traffic_data(i)
+                    weights.append(traffic_data.get('weight', 0))
+                self.cached_weights = weights
+                self.last_weight_update = time.time()
+            
+            fig = self.figures['traffic_weight']
+            ax = fig.axes[0]
+            ax.clear()
+            
+            # Create simplified bar chart
+            signals = [f'Signal {chr(65+i)}' for i in range(4)]
+            ax.bar(signals, self.cached_weights, width=0.6)
+            
+            ax.set_title('Current Traffic Weight by Signal')
+            ax.set_xlabel('Signal')
+            ax.set_ylabel('Traffic Weight')
+            ax.grid(False)
+            
+            # Format with minimal decorations
+            ax.tick_params(axis='both', which='both', length=0)
+            fig.tight_layout()
+            
+            # Use faster canvas draw
+            self.canvases['traffic_weight'].draw_idle()
             
         except Exception as e:
-            print(f"Error updating comparative analysis: {e}")
+            logging.error(f"Error updating traffic weight graph: {str(e)}")
+    
+    def update_timing_graph(self):
+        """Update timing graph"""
+        try:
+            if not hasattr(self, 'cached_timing') or time.time() - self.last_timing_update > 2.0:
+                # Get timing data for each signal
+                green_times = []
+                yellow_times = []
+                red_times = []
+                
+                for i in range(4):
+                    signal_data = self.traffic_manager.get_signal(i)
+                    state = signal_data.get('state', 'RED')
+                    remaining = signal_data.get('remaining_time', 0)
+                    
+                    if state == 'GREEN':
+                        green_times.append(remaining)
+                        yellow_times.append(0)
+                        red_times.append(0)
+                    elif state == 'YELLOW':
+                        green_times.append(0)
+                        yellow_times.append(remaining)
+                        red_times.append(0)
+                    else:  # RED
+                        green_times.append(0)
+                        yellow_times.append(0)
+                        red_times.append(remaining)
+                
+                self.cached_timing = (green_times, yellow_times, red_times)
+                self.last_timing_update = time.time()
+            
+            fig = self.figures['timing']
+            ax = fig.axes[0]
+            ax.clear()
+            
+            # Create simplified stacked bar chart
+            signals = [f'Signal {chr(65+i)}' for i in range(4)]
+            width = 0.6
+            
+            green_times, yellow_times, red_times = self.cached_timing
+            
+            ax.bar(signals, green_times, width, label='Green', color='green')
+            ax.bar(signals, yellow_times, width, bottom=green_times, 
+                  label='Yellow', color='yellow')
+            ax.bar(signals, red_times, width, 
+                  bottom=np.array(green_times) + np.array(yellow_times),
+                  label='Red', color='red')
+            
+            ax.set_title('Current Signal Timing')
+            ax.set_xlabel('Signal')
+            ax.set_ylabel('Time (seconds)')
+            ax.grid(False)
+            ax.legend(loc='upper right', frameon=False)
+            
+            # Format with minimal decorations
+            ax.tick_params(axis='both', which='both', length=0)
+            fig.tight_layout()
+            
+            # Use faster canvas draw
+            self.canvases['timing'].draw_idle()
+            
+        except Exception as e:
+            logging.error(f"Error updating timing graph: {str(e)}")
 
 
 class ReportsPanel(ttk.Frame):
@@ -759,6 +873,7 @@ class AnalyticsPanel(ttk.Frame):
         self.traffic_manager = traffic_manager
         
         self.setup_ui()
+        self.pack(fill=tk.BOTH, expand=True)
     
     def setup_ui(self):
         """Setup main analytics UI"""
@@ -769,19 +884,29 @@ class AnalyticsPanel(ttk.Frame):
         # Live Statistics Tab
         self.live_stats_panel = LiveStatsPanel(self.notebook, self.traffic_manager)
         self.notebook.add(self.live_stats_panel, text="Live Stats")
+        self.live_stats_panel.start_updates()
         
         # Graphs Tab
         self.graphs_panel = GraphsPanel(self.notebook, self.traffic_manager)
-        self.notebook.add(self.graphs_panel, text="Real-Time Graphs")
+        self.notebook.add(self.graphs_panel, text="Graphs")
         
         # Reports Tab
         self.reports_panel = ReportsPanel(self.notebook, self.traffic_manager)
         self.notebook.add(self.reports_panel, text="Reports & Export")
     
-    def cleanup(self):
-        """Cleanup method to stop all update threads"""
-        if hasattr(self.live_stats_panel, 'stop_updates'):
+    def update_analytics(self):
+        """Update all analytics components"""
+        if hasattr(self.live_stats_panel, 'update_stats'):
+            self.live_stats_panel.update_stats()
+        if hasattr(self.graphs_panel, 'update_graphs'):
+            self.graphs_panel.update_graphs()
+    
+    def __del__(self):
+        """Cleanup when panel is destroyed"""
+        if hasattr(self, 'live_stats_panel'):
             self.live_stats_panel.stop_updates()
+        if hasattr(self, 'graphs_panel'):
+            self.graphs_panel.stop_graph_updates()
 
 
 # Additional utility functions for analytics

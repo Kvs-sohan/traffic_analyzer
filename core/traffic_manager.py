@@ -12,10 +12,14 @@ import logging
 from datetime import datetime, timedelta
 from collections import deque
 import pandas as pd
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any
 
 from .detector import VehicleDetector
 from .signal import SignalController
 from .database import TrafficDatabase
+from .camera import CameraManager
+from .area_manager import AreaManager
 
 class CameraManager:
     """Handles camera/video source management"""
@@ -347,18 +351,29 @@ class SmartTrafficManager:
                 'efficiency_score': 0.0
             } for _ in range(4)]
             
+            # Initialize signals list
+            self.signals = self.signal_controller.signals
+            if not self.signals:
+                raise RuntimeError("Failed to initialize signals")
+            
+            # Signal sequence control
+            self.current_signal_index = 0  # Start with Signal A
+            self.yellow_start_time = None
+            self.yellow_duration = 3  # 3 seconds yellow time
+            self.next_signal_green_time = None  # Store calculated green time
+            self.active_detection_signal = 0  # Track which signal is being analyzed by YOLO
+            self.cycle_start_time = None  # Track when current signal phase started
+            
             # Performance tracking
             self.fps_counters = [0] * 4
-            self.last_fps_time = time.time()
             
             # Initialize components
             self._initialize_system()
-            logging.info("Smart Traffic Manager initialization completed successfully")
             
         except Exception as e:
-            logging.error("Failed to initialize Smart Traffic Manager: %s", str(e))
-            raise RuntimeError(f"Traffic Manager initialization failed: {str(e)}")
-    
+            logging.error(f"Failed to initialize Smart Traffic Manager: {str(e)}")
+            raise
+
     def _initialize_system(self):
         """Initialize all system components"""
         try:
@@ -419,6 +434,12 @@ class SmartTrafficManager:
             self.running = True
             logging.info("Starting traffic management system...")
             
+            # Initialize first signal (Signal A) as GREEN
+            self.signals[0].set_state('GREEN', self.signals[0].default_green_time)
+            self.current_signal_index = 0
+            self.active_detection_signal = 1  # Start analyzing Signal B
+            self.cycle_start_time = time.time()
+            
             # Start processing threads for each signal
             for i in range(4):
                 thread = threading.Thread(
@@ -467,59 +488,58 @@ class SmartTrafficManager:
             return False
     
     def _process_signal(self, signal_id):
-        """Process video feed for a signal"""
-        cap = self.camera_manager.captures[signal_id]
-        if not cap or not cap.isOpened():
-            logging.error(f"Failed to open capture for signal {signal_id}")
-            return
-        
-        # Get detection area for this signal
-        area = self.area_manager.get_area(signal_id)
-        if not area:
-            logging.error(f"No detection area defined for signal {signal_id}")
-            return
-        
-        frame_count = 0
-        last_time = time.time()
-        
+        """Process signal video feed and detect vehicles"""
         while self.running:
             try:
-                # Read frame
-                ret, frame = cap.read()
-                if not ret:
-                    # If end of video, loop back
-                    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                # Only process YOLO detection for the active detection signal
+                if signal_id != self.active_detection_signal:
+                    time.sleep(0.1)
+                    continue
+                
+                # Get frame from camera
+                frame = self.camera_manager.get_frame(signal_id)
+                if frame is None:
                     continue
                 
                 # Store current frame
                 self.current_frames[signal_id] = frame.copy()
                 
-                # Detect vehicles in area
+                # Get detection area
+                area = self.area_manager.get_area(signal_id)
+                if not area:
+                    # Use default area if none defined
+                    height, width = frame.shape[:2]
+                    area = [(0, 0), (width, 0), (width, height), (0, height)]
+                
+                # Run vehicle detection
                 vehicle_count, traffic_weight, processed_frame = self.detector.detect_vehicles_in_area(frame, area)
                 
-                # Store processed frame
-                self.current_frames[signal_id] = processed_frame
+                # Store detections for analytics
+                self.current_detections[signal_id] = [{'class': 'car', 'confidence': 1.0}] * vehicle_count
+                
+                # Store current frame with detections
+                if processed_frame is not None:
+                    self.current_frames[signal_id] = processed_frame
                 
                 # Update metrics
-                self.current_metrics[signal_id] = {
+                self.current_metrics[signal_id].update({
                     'vehicle_count': vehicle_count,
-                    'traffic_weight': traffic_weight,
-                    'efficiency_score': self.analyzer.calculate_efficiency_score(30, traffic_weight, vehicle_count)
-                }
+                    'traffic_weight': traffic_weight
+                })
                 
-                # Update analyzer history
-                self.analyzer.update_history(signal_id, vehicle_count, traffic_weight)
+                # If current signal is yellow, calculate next green time
+                current_signal = self.signals[self.current_signal_index]
+                if (current_signal.current_state == 'YELLOW' and 
+                    signal_id == (self.current_signal_index + 1) % 4):
+                    # Calculate green time based on detected vehicles
+                    self.next_signal_green_time = self._calculate_green_time(vehicle_count, traffic_weight)
+                    logging.info(f"Calculated green time for next signal: {self.next_signal_green_time}s")
                 
                 # Update FPS counter
-                frame_count += 1
-                current_time = time.time()
-                if current_time - last_time >= 1.0:
-                    self.fps_counters[signal_id] = frame_count
-                    frame_count = 0
-                    last_time = current_time
+                self.fps_counters[signal_id] += 1
                 
-                # Small delay to control processing rate
-                time.sleep(0.01)  # 100 FPS max
+                # Small sleep to prevent CPU overload
+                time.sleep(0.01)
                 
             except Exception as e:
                 logging.error(f"Error processing signal {signal_id}: {str(e)}")
@@ -529,23 +549,50 @@ class SmartTrafficManager:
         """Control traffic signals based on traffic conditions"""
         while self.running:
             try:
-                # Get current traffic weights for all signals
-                traffic_weights = [
-                    self.analyzer.get_traffic_trend(i) 
-                    for i in range(4)
-                ]
+                current_time = time.time()
+                current_signal = self.signals[self.current_signal_index]
                 
-                # Update signal states based on traffic weights
-                self.signal_controller.update_timing(traffic_weights)
+                # Handle yellow signal transition
+                if current_signal.current_state == 'YELLOW':
+                    if current_time - self.yellow_start_time >= self.yellow_duration:
+                        # Yellow phase complete, switch to next signal
+                        current_signal.set_state('RED')
+                        
+                        # Move to next signal
+                        self.current_signal_index = (self.current_signal_index + 1) % 4
+                        next_signal = self.signals[self.current_signal_index]
+                        
+                        # Use pre-calculated green time from YOLO detection
+                        green_time = self.next_signal_green_time or next_signal.default_green_time
+                        
+                        # Set next signal to green
+                        next_signal.set_state('GREEN', green_time)
+                        logging.info(f"Signal {self.current_signal_index} turned GREEN for {green_time} seconds")
+                        
+                        # Reset next signal green time
+                        self.next_signal_green_time = None
+                        
+                        # Update active detection signal to next in sequence
+                        self.active_detection_signal = (self.current_signal_index + 1) % 4
                 
-                # Update signal states
-                self.signal_controller.update_signals()
+                # Handle green signal completion
+                elif current_signal.current_state == 'GREEN' and current_signal.remaining_time <= 0:
+                    # Switch to yellow
+                    current_signal.set_state('YELLOW', self.yellow_duration)
+                    self.yellow_start_time = current_time
+                    logging.info(f"Signal {self.current_signal_index} turned YELLOW")
                 
-                time.sleep(1.0)  # Update every second
+                # Update remaining times
+                if current_signal.current_state == 'GREEN':
+                    elapsed = current_time - self.cycle_start_time if hasattr(self, 'cycle_start_time') else 0
+                    current_signal.remaining_time = max(0, current_signal.remaining_time - elapsed)
+                    self.cycle_start_time = current_time
+                
+                time.sleep(0.1)  # Update every 100ms
                 
             except Exception as e:
-                print(f"❌ Error in signal control: {e}")
-                time.sleep(5.0)
+                logging.error(f"Error in signal control: {str(e)}")
+                time.sleep(1.0)
     
     def get_current_frame(self, signal_id):
         """Get the current frame for a signal"""
@@ -681,25 +728,54 @@ class SmartTrafficManager:
             return False
     
     def get_live_statistics(self):
-        """Get real-time system statistics"""
-        stats = {
-            'timestamp': datetime.now(),
-            'signals': [],
-            'system': self.get_system_status()
-        }
-        
-        for i in range(4):
-            signal_stats = {
-                'id': i,
-                'name': chr(65 + i),
-                'metrics': self.get_current_metrics(i),
-                'state': self.get_signal(i),
-                'fps': self.fps_counters[i],
-                'trend': self.analyzer.get_traffic_trend(i)
+        """Get live statistics for all signals"""
+        try:
+            # Get current data from database (last 5 minutes)
+            df = self.get_analytics_data(duration=300)  # 5 minutes
+            
+            # Initialize response structure
+            response = {
+                'signals': []
             }
-            stats['signals'].append(signal_stats)
-        
-        return stats
+            
+            # Process each signal
+            for signal_id in range(4):
+                signal_data = df[df['signal_id'] == signal_id]
+                
+                if not signal_data.empty:
+                    latest_data = signal_data.iloc[-1]
+                    metrics = {
+                        'vehicle_count': int(latest_data['vehicle_count']),
+                        'traffic_weight': float(latest_data['traffic_weight']),
+                        'efficiency_score': float(latest_data['efficiency_score'])
+                    }
+                    
+                    state = {
+                        'state': 'GREEN' if latest_data['green_time'] > 0 else 'RED',
+                        'remaining_time': int(latest_data['green_time'])
+                    }
+                else:
+                    # Default values if no data available
+                    metrics = {
+                        'vehicle_count': 0,
+                        'traffic_weight': 0.0,
+                        'efficiency_score': 0.0
+                    }
+                    state = {
+                        'state': 'RED',
+                        'remaining_time': 0
+                    }
+                
+                response['signals'].append({
+                    'metrics': metrics,
+                    'state': state
+                })
+            
+            return response
+            
+        except Exception as e:
+            print(f"Error getting live statistics: {str(e)}")
+            return {'signals': []}
     
     def optimize_signal_timing(self, enable_optimization=True):
         """Enable/disable adaptive signal timing optimization"""
@@ -714,3 +790,103 @@ class SmartTrafficManager:
         """Cleanup when object is destroyed"""
         if hasattr(self, 'running') and self.running:
             self.stop_system()
+
+    def get_analytics_data(self):
+        """Get analytics data for UI display"""
+        try:
+            analytics = {
+                'total_vehicles': 0,
+                'peak_time': None,
+                'peak_count': 0,
+                'signals': []
+            }
+            
+            # Get data for each signal
+            for signal_id in range(4):
+                signal_data = self.get_signal(signal_id)
+                traffic_data = self.get_traffic_data(signal_id)
+                
+                # Get signal statistics
+                stats = self.database.get_signal_statistics(signal_id)
+                
+                signal_analytics = {
+                    'signal_id': signal_id,
+                    'total_vehicles': stats.get('total_cycles', 0),
+                    'avg_weight': stats.get('avg_traffic_weight', 0.0),
+                    'efficiency': stats.get('avg_efficiency', 0.0),
+                    'current_state': signal_data.get('state', 'RED'),
+                    'remaining_time': signal_data.get('remaining_time', 0)
+                }
+                
+                analytics['signals'].append(signal_analytics)
+                analytics['total_vehicles'] += signal_analytics['total_vehicles']
+                
+                # Update peak count
+                if stats.get('max_vehicles', 0) > analytics['peak_count']:
+                    analytics['peak_count'] = stats['max_vehicles']
+            
+            # Get peak time from database
+            df = self.database.get_analytics_data()
+            if not df.empty:
+                peak_row = df.loc[df['vehicle_count'].idxmax()]
+                analytics['peak_time'] = pd.to_datetime(peak_row['timestamp'])
+            
+            return analytics
+            
+        except Exception as e:
+            logging.error(f"Error getting analytics data: {str(e)}")
+            return {}
+    
+    def get_traffic_data(self, signal_id):
+        """Get current traffic data for a signal"""
+        try:
+            if not 0 <= signal_id < len(self.signals):
+                raise ValueError(f"Invalid signal ID: {signal_id}")
+            
+            # Get current frame
+            frame = self.current_frames[signal_id]
+            if frame is None:
+                return {'count': 0, 'weight': 0.0}
+            
+            # Get detection area
+            area = self.area_manager.get_area(signal_id)
+            if not area:
+                return {'count': 0, 'weight': 0.0}
+            
+            # Detect vehicles
+            count, weight, _ = self.detector.detect_vehicles_in_area(frame, area)
+            
+            return {
+                'count': count,
+                'weight': weight
+            }
+            
+        except Exception as e:
+            logging.error(f"Error getting traffic data: {str(e)}")
+            return {'count': 0, 'weight': 0.0}
+
+    def _calculate_green_time(self, vehicle_count, traffic_weight):
+        """Calculate green signal time based on traffic conditions"""
+        try:
+            # Base time calculation
+            base_time = 15  # Minimum green time
+            
+            # Add time based on vehicle count
+            if vehicle_count > 0:
+                vehicle_factor = min(vehicle_count * 2, 30)  # Up to 30 seconds for vehicles
+                base_time += vehicle_factor
+            
+            # Add time based on traffic weight
+            weight_factor = min(traffic_weight * 3, 15)  # Up to 15 seconds for weight
+            base_time += weight_factor
+            
+            # Ensure time is within bounds
+            min_green = 15
+            max_green = 60
+            green_time = max(min_green, min(base_time, max_green))
+            
+            return int(green_time)
+            
+        except Exception as e:
+            logging.error(f"Error calculating green time: {str(e)}")
+            return 30  # Default 30 seconds if calculation fails

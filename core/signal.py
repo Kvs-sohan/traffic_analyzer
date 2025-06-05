@@ -108,15 +108,21 @@ class SignalController:
             self.current_sequence = []
             self.adaptive_mode = True
             self.emergency_mode = False
-            self.current_active_signal = 0
-            self.cycle_start_time = None
             
             # Create signals
             for i in range(4):
                 self.signals.append(TrafficSignal(i))
             
-            # Set initial sequence
-            self.current_sequence = list(range(4))
+            # Set initial states - Signal A starts as GREEN, others as RED
+            self.signals[0].set_state('GREEN', self.signals[0].default_green_time)
+            for i in range(1, 4):
+                self.signals[i].set_state('RED')
+            
+            # Initialize timing
+            self.cycle_start_time = time.time()
+            self.yellow_duration = 3  # Fixed 3 seconds yellow time
+            self.current_signal_index = 0
+            
             logging.info("Signal Controller initialized successfully")
             
         except Exception as e:
@@ -132,6 +138,18 @@ class SignalController:
         except Exception as e:
             logging.error("Error getting signal state: %s", str(e))
             raise
+    
+    def set_adaptive_mode(self, enabled):
+        """Enable/disable adaptive timing mode"""
+        self.adaptive_mode = enabled
+        logging.info(f"Adaptive mode {'enabled' if enabled else 'disabled'}")
+    
+    def get_system_status(self):
+        """Get overall system status"""
+        return {
+            'emergency_mode': self.emergency_mode,
+            'signals_status': [signal.get_state_info() for signal in self.signals]
+        }
     
     def update_timing(self, traffic_weights: List[float]):
         """Update signal timing based on traffic weights"""
@@ -241,63 +259,46 @@ class SignalController:
         for signal in self.signals:
             signal.priority_mode = enabled
     
-    def get_system_status(self):
-        """Get overall system status"""
-        return {
-            'emergency_mode': self.emergency_mode,
-            'current_active_signal': self.current_active_signal,
-            'signals_status': [signal.get_state_info() for signal in self.signals]
-        }
-    
     def update_signals(self):
         """Update signal states based on timing"""
-        current_time = time.time()
-        
-        # Initialize cycle if not started
-        if self.cycle_start_time is None:
-            self.cycle_start_time = current_time
-            self.signals[self.current_active_signal].set_state('GREEN', 
-                self.signals[self.current_active_signal].default_green_time)
-            return
-        
-        # Get current active signal
-        current_signal = self.signals[self.current_active_signal]
-        current_state = current_signal.get_state_info()
-        
-        # Update remaining time
-        elapsed = current_time - self.cycle_start_time
-        remaining = max(0, current_state['remaining_time'] - elapsed)
-        
-        if remaining <= 0:
-            # Time to change signals
-            if current_state['state'] == 'GREEN':
-                # Change to yellow
-                current_signal.set_state('YELLOW', current_signal.yellow_time)
-                self.cycle_start_time = current_time
+        try:
+            current_time = time.time()
+            current_signal = self.signals[self.current_signal_index]
             
-            elif current_state['state'] == 'YELLOW':
-                # Change to red and activate next signal
-                current_signal.set_state('RED')
-                self.current_active_signal = (self.current_active_signal + 1) % len(self.signals)
-                next_signal = self.signals[self.current_active_signal]
-                
-                # Calculate green time for next signal
-                if self.adaptive_mode:
-                    green_time = next_signal.calculate_adaptive_green_time(
-                        vehicle_count=len(next_signal.vehicle_history),
-                        traffic_weight=sum(next_signal.vehicle_history) / len(next_signal.vehicle_history) if next_signal.vehicle_history else 1.0,
-                        time_of_day=datetime.now()
-                    )
-                else:
-                    green_time = next_signal.default_green_time
-                
-                next_signal.set_state('GREEN', green_time)
-                self.cycle_start_time = current_time
-            
-        else:
             # Update remaining time
-            current_signal.set_state(current_state['state'], int(remaining))
-    
-    def set_adaptive_mode(self, enabled):
-        """Enable/disable adaptive timing mode"""
-        self.adaptive_mode = enabled
+            if current_signal.current_state != 'RED':
+                elapsed = current_time - self.cycle_start_time
+                current_signal.remaining_time = max(0, current_signal.remaining_time - elapsed)
+                self.cycle_start_time = current_time
+            
+            # Handle state transitions
+            if current_signal.remaining_time <= 0:
+                if current_signal.current_state == 'GREEN':
+                    # Change to yellow
+                    current_signal.set_state('YELLOW', self.yellow_duration)
+                    logging.info(f"Signal {self.current_signal_index} turned YELLOW")
+                    
+                elif current_signal.current_state == 'YELLOW':
+                    # Change to red and activate next signal
+                    current_signal.set_state('RED')
+                    self.current_signal_index = (self.current_signal_index + 1) % len(self.signals)
+                    next_signal = self.signals[self.current_signal_index]
+                    
+                    # Calculate green time for next signal
+                    if self.adaptive_mode:
+                        green_time = next_signal.calculate_adaptive_green_time(
+                            vehicle_count=len(next_signal.vehicle_history),
+                            traffic_weight=sum(next_signal.vehicle_history) / len(next_signal.vehicle_history) if next_signal.vehicle_history else 1.0,
+                            time_of_day=datetime.now()
+                        )
+                    else:
+                        green_time = next_signal.default_green_time
+                    
+                    next_signal.set_state('GREEN', green_time)
+                    logging.info(f"Signal {self.current_signal_index} turned GREEN for {green_time} seconds")
+            
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error updating signals: {str(e)}")
+            return False

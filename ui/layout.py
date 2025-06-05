@@ -68,7 +68,11 @@ class VideoPanel(ttk.Frame):
         self.signal_name = signal_name
         self.current_frame = None
         self.video_label = None
-        self.photo = None  # Keep a reference to avoid garbage collection
+        self.photo = None
+        self.last_frame_time = 0
+        self.frame_interval = 1.0 / 30  # Target 30 FPS
+        self.cached_frame = None
+        self.cached_frame_size = (320, 240)
         
         self.setup_ui()
     
@@ -121,18 +125,24 @@ class VideoPanel(ttk.Frame):
             if frame is None:
                 return
                 
-            # Resize frame to fit display area
-            frame = cv2.resize(frame, (320, 240))
+            current_time = time.time()
+            if current_time - self.last_frame_time < self.frame_interval:
+                return  # Skip frame if too soon
+                
+            # Check if frame needs resizing
+            if frame.shape[:2][::-1] != self.cached_frame_size:
+                frame = cv2.resize(frame, self.cached_frame_size)
             
-            # Convert frame from BGR to RGB
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            
-            # Convert to PhotoImage
-            image = Image.fromarray(frame_rgb)
-            self.photo = ImageTk.PhotoImage(image=image)
-            
-            # Update label
-            self.video_label.configure(image=self.photo)
+            # Convert frame from BGR to RGB only if needed
+            if frame is not self.cached_frame:
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                image = Image.fromarray(frame_rgb)
+                self.photo = ImageTk.PhotoImage(image=image)
+                self.cached_frame = frame
+                
+                # Update label
+                self.video_label.configure(image=self.photo)
+                self.last_frame_time = current_time
             
         except Exception as e:
             logging.error(f"Error updating video for signal {self.signal_id}: {str(e)}")
@@ -157,6 +167,11 @@ class VideoPanel(ttk.Frame):
             text=f"Vehicles: {vehicle_count} | Weight: {traffic_weight:.1f}"
         )
         self.efficiency_label.configure(text=f"Efficiency: {efficiency:.1f}%")
+
+    def __del__(self):
+        """Cleanup resources"""
+        self.cached_frame = None
+        self.photo = None
 
 class ControlPanel(ttk.Frame):
     """Control panel for system operations"""
@@ -720,43 +735,63 @@ class TrafficUI:
     
     def update_loop(self):
         """Main update loop for UI"""
+        frame_count = 0
+        last_analytics_update = time.time()
+        
         while self.running:
             try:
-                self.update_ui()
-                time.sleep(UI_CONFIG['update_interval'] / 1000.0)
+                current_time = time.time()
+                
+                # Update UI at different rates for different components
+                if frame_count % 2 == 0:  # Update video every other frame
+                    self.update_video_panels()
+                
+                if frame_count % 5 == 0:  # Update status less frequently
+                    self.update_status_panels()
+                
+                # Update analytics every 5 seconds
+                if current_time - last_analytics_update >= 5.0:
+                    if self.analytics_panel and hasattr(self.analytics_panel, 'update_analytics'):
+                        self.analytics_panel.update_analytics()
+                    last_analytics_update = current_time
+                
+                frame_count = (frame_count + 1) % 30  # Reset counter every 30 frames
+                time.sleep(max(0.01, UI_CONFIG['update_interval'] / 1000.0))  # Ensure minimum sleep
+                
             except Exception as e:
-                print(f"UI update error: {e}")
+                logging.error(f"UI update error: {e}")
                 time.sleep(1.0)
     
-    def update_ui(self):
-        """Update UI elements"""
+    def update_video_panels(self):
+        """Update only video panels"""
         if not self.root or not self.root.winfo_exists():
             return
         
         try:
-            # Update video panels
             for i, panel in enumerate(self.video_panels):
-                # Get current frame
-                frame = self.traffic_manager.get_current_frame(i)
-                if frame is not None:
-                    panel.update_video(frame)
-                
-                # Get signal state and metrics
+                if panel.winfo_viewable():  # Only update visible panels
+                    frame = self.traffic_manager.get_current_frame(i)
+                    if frame is not None:
+                        panel.update_video(frame)
+        except Exception as e:
+            logging.error(f"Error updating video panels: {e}")
+    
+    def update_status_panels(self):
+        """Update status and metrics"""
+        if not self.root or not self.root.winfo_exists():
+            return
+        
+        try:
+            for i, panel in enumerate(self.video_panels):
                 signal_state = self.traffic_manager.get_signal(i)
                 metrics = self.traffic_manager.get_current_metrics(i)
                 panel.update_status(signal_state, metrics)
-            
-            # Update control panel
+                
             if self.control_panel:
                 system_status = self.traffic_manager.get_system_status()
                 self.control_panel.update_status(system_status)
-            
-            # Update analytics panel
-            if self.analytics_panel and hasattr(self.analytics_panel, 'update_analytics'):
-                self.analytics_panel.update_analytics()
-                
         except Exception as e:
-            print(f"Error updating UI: {e}")
+            logging.error(f"Error updating status panels: {e}")
     
     def run(self):
         """Run the UI main loop"""
